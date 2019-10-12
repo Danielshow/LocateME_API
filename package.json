@@ -1,0 +1,19 @@
+{
+  "name": "LocateME_API",
+  "version": "1.0.0",
+  "description": "A Security application",
+  "main": "index.js",
+  "repository": "git@github.com:Danielshow/LocateME_API.git",
+  "author": "danielshow <danielshotonwa53@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js",
+    "start:dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.3"
+  }
+}

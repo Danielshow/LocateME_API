@@ -7,11 +7,16 @@
   "author": "danielshow <danielshotonwa53@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node src/index.js",
-    "start:dev": "nodemon src/index.js",
+    "build": "rm -rf dist/ && babel ./src --out-dir dist/ --ignore ./node_modules",
+    "start": "yarn build && node ./dist/index.js",
+    "start:dev": "nodemon --exec babel-node src/index.js",
     "test": "jest"
   },
   "dependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/preset-env": "^7.6.3",
     "express": "^4.17.1"
   },
   "devDependencies": {

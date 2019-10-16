@@ -1,0 +1,96 @@
+# CircleCI 2.0 configuration file
+
+# Check https://circleci.com/docs/1.0/language-nodejs/ for more details
+version: 2
+defaults: &defaults
+  docker:
+    - image: circleci/node:10.13.0
+  working_directory: ~/locateme_api
+
+install_npm_packages: &install_npm_packages
+  run:
+    name: Install  Dependencies
+    command: yarn install
+
+attach_workspace: &attach_workspace
+  attach_workspace:
+    at: ~/locateme_api
+
+persist_to_workspace: &persist_to_workspace
+  persist_to_workspace:
+    root: .
+    paths: .
+
+jobs:
+  checkout_code:
+    <<: *defaults
+    steps: # a collection of executable commands
+      - checkout # special step to check out source code to working directory
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - *install_npm_packages
+
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+            - node_modules
+      - *persist_to_workspace
+
+  test_and_report:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - *install_npm_packages
+      - run:
+          name: Run test suites
+          command: |
+            yarn test
+      - *persist_to_workspace
+
+  build_application_artifacts:
+    <<: *defaults
+    steps:
+      - *attach_workspace
+      - *install_npm_packages
+      - run: yarn build
+      - *persist_to_workspace
+
+  # deploy:
+  #   <<: *defaults
+  #   steps:
+  #     - *attach_workspace
+  #     - run:
+  #         name: Add remote origin
+  #         command: |
+  #           git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git
+  #     - run:
+  #         name: Deploy to Heroku
+  #         command: |
+  #            git push heroku HEAD:master -f
+
+  
+workflows:
+  version: 2
+  test_build_deploy:
+    jobs:
+      - checkout_code
+      - test_and_report:
+          requires:
+            - checkout_code
+      - build_application_artifacts:
+          requires:
+            - checkout_code
+            - test_and_report
+      # - deploy:
+      #     requires:
+      #       - checkout_code
+      #       - test_and_report
+      #       - build_application_artifacts
+      
+           
+      
+     

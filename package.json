@@ -2,22 +2,27 @@
   "name": "LocateME_API",
   "version": "1.0.0",
   "description": "A Security application",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:Danielshow/LocateME_API.git",
   "author": "danielshow <danielshotonwa53@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist/ && babel ./src --out-dir dist/ --ignore ./node_modules",
-    "start": "yarn build && node ./dist/index.js",
-    "start:dev": "nodemon --exec babel-node src/index.js",
-    "test": "jest"
+    "build": "run-s build:clean build:code",
+    "start": "run-s build && node dist/index.js",
+    "build:code": "tsc",
+    "build:clean": "rimraf ./dist",
+    "start:dev": "nodemon src/index.ts",
+    "test": "jest",
+    "dev:debug": "nodemon --inspect src/index.ts"
   },
   "dependencies": {
-    "@babel/cli": "^7.6.4",
-    "@babel/core": "^7.6.4",
-    "@babel/node": "^7.6.3",
-    "@babel/preset-env": "^7.6.3",
-    "express": "^4.17.1"
+    "@types/express": "^4.17.2",
+    "@types/node": "^12.12.7",
+    "express": "^4.17.1",
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^8.4.1",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
   },
   "devDependencies": {
     "jest": "^24.9.0",

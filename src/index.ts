@@ -5,12 +5,12 @@ const app = express();
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.json({message: "it works, Yaaaaay"});
+  res.json({ message: "it works, Yaaaaay" });
 });
 
 // handle all routes
-app.get("*", (req, res)  => {
-  res.json({message: "Routes not available"});
+app.get("*", (req, res) => {
+  res.json({ message: "Routes not available" });
 });
 
 const PORT = 3000;
